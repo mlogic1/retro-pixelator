@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <float.h>
 
-typedef struct 
+typedef struct
 {
 	int r;
 	int g;
@@ -46,9 +46,9 @@ ImagePtr Pixelator_LoadImage(const char* imagePath)
 	ImagePtr image = malloc(sizeof(PImage));
 	image->width = w;
 	image->height = h;
-	
+
 	unsigned char* tmpRGBBuffer = malloc(sizeof(unsigned char) * w * h * 3);
-	if (tjDecompress2(instance, inputImageBuffer, inputImageSize, tmpRGBBuffer, w, 0, h, TJPF_RGB, TJFLAG_FASTDCT) != 0){	
+	if (tjDecompress2(instance, inputImageBuffer, inputImageSize, tmpRGBBuffer, w, 0, h, TJPF_RGB, TJFLAG_FASTDCT) != 0){
 		tjDestroy(instance);
 		free(tmpRGBBuffer);
 		free(inputImageBuffer);
@@ -80,6 +80,16 @@ void Pixelator_FreeImage(PImage* image)
 	image->width = 0;
 }
 
+void Pixelator_GetImageResolution(ImagePtr image, int* width, int* height)
+{
+	if (image == NULL){
+		return;
+	}
+
+	*width = image->width;
+	*height = image->height;
+}
+
 int Pixelator_SaveImage(ImagePtr image, const char* imagePath)
 {
 	tjhandle instance = tjInitCompress();
@@ -92,10 +102,10 @@ int Pixelator_SaveImage(ImagePtr image, const char* imagePath)
 	unsigned int rgbBufferSize = numPixels * 3;
 	unsigned char* tmpRGBBuffer = malloc(sizeof(unsigned char) * rgbBufferSize);
 	const int stride = 3;
-	
+
 	int index = 0;
 	for (int i = 0; i < numPixels; ++i){
-		
+
 		tmpRGBBuffer[index] 	= image->pixels[i].r;
 		tmpRGBBuffer[index + 1] = image->pixels[i].g;
 		tmpRGBBuffer[index + 2] = image->pixels[i].b;
@@ -142,7 +152,7 @@ int Pixelator_DownSampleImage(ImagePtr image, const int blockSize)
 			int rTotal = 0, gTotal = 0, bTotal = 0;
 			for (int di = i; di < (i + blockSize); ++di){
 				for (int dj = j; dj < (j + blockSize); ++dj){
-					
+
 					if (dj >= w || di >= h) continue; // bounds check
 
 					if (dj == 49){
@@ -160,7 +170,7 @@ int Pixelator_DownSampleImage(ImagePtr image, const int blockSize)
 			}
 			if (pixelCount == 0)
 				continue;
-			
+
 			blockAvgColor.r = rTotal / pixelCount;
 			blockAvgColor.g = gTotal / pixelCount;
 			blockAvgColor.b = bTotal / pixelCount;
@@ -232,7 +242,7 @@ static void utility_kMeansCalculateCenteroids(ImagePtr image, int K, JColor* out
 				newCentroids[j].g /= counts[j];
 				newCentroids[j].b /= counts[j];
 			}
-			else 
+			else
 			{
 				newCentroids[j] = image->pixels[rand() % numPixels];
 			}
@@ -246,7 +256,7 @@ static void utility_kMeansCalculateCenteroids(ImagePtr image, int K, JColor* out
 	for (int i = 0; i < K; ++i){
 		outCentroids[i] = centroids[i];
 	}
-	
+
 	free(assingments);
 	free(centroids);
 }

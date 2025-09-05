@@ -10,6 +10,7 @@ typedef PImage* ImagePtr;
 
 ImagePtr Pixelator_LoadImage(const char* imagePath);
 void Pixelator_FreeImage(ImagePtr image);
+void Pixelator_GetImageResolution(ImagePtr image, int* width, int* height);
 int Pixelator_SaveImage(ImagePtr image, const char* imagePath);
 
 int Pixelator_DownSampleImage(ImagePtr image, const int blockSize);
