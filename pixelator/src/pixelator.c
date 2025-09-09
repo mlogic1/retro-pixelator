@@ -155,10 +155,6 @@ int Pixelator_DownSampleImage(ImagePtr image, const int blockSize)
 
 					if (dj >= w || di >= h) continue; // bounds check
 
-					if (dj == 49){
-						int x = 1;
-					}
-
 					int index = di * w + dj;
 					JColor pixel = image->pixels[index];
 
