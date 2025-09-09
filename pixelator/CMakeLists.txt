@@ -7,7 +7,7 @@ set(PIXELATOR_SRC_FILES
 
 if(PIXELATOR_BUILD_AS_EXECUTABLE)
 	add_executable(pixelator ${PIXELATOR_SRC_FILES}
-						 	 src/pixelator.c)
+						 	 src/main.c)
 else()
 	add_library(pixelator SHARED ${PIXELATOR_SRC_FILES})
 endif()

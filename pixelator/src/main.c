@@ -33,7 +33,7 @@ Arguments ParseArguments(int argc, char* argv[])
 			case 'i':
 				input_file = optarg;
 				break;
-			
+
 			case 'o':
 				output_file = optarg;
 				break;
@@ -41,11 +41,11 @@ Arguments ParseArguments(int argc, char* argv[])
 			case 'b':
 				block_size = atoi(optarg);
 				break;
-			
+
 			case 'k':
 				num_colors = atoi(optarg);
 				break;
-			
+
 			default:
 				break;
 		}
@@ -73,5 +73,16 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
+	ImagePtr image = Pixelator_LoadImage(args.input_file);
+	if (image == NULL)
+	{
+		printf("Unable to load input image.");
+		return EXIT_FAILURE;
+	}
+	Pixelator_DownSampleImage(image, args.block_size);
+	Pixelator_KMeansQuantify(image, args.num_colors);
+
+	Pixelator_SaveImage(image, args.output_file);
+	Pixelator_FreeImage(image);
 	return EXIT_SUCCESS;
 }
